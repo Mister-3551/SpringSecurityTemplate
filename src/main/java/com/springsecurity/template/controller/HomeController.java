@@ -12,11 +12,6 @@ public class HomeController {
         return "Spring Boot Tutorial Security JWT! - Username: " + authentication.getName() + " - " + authentication.getAuthorities();
     }
 
-    @GetMapping("/sign-up")
-    public String signUp() {
-        return "Welcome on the Sign Up page";
-    }
-
     @GetMapping("/user")
     public String user(Authentication authentication) {
         return "Welcome on the User page! - Username or email address: " + authentication.getName() + " - " + authentication.getAuthorities();
