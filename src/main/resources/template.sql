@@ -1,4 +1,4 @@
--- Zbirka podatkov: `memo_stick_rescue`
+-- Zbirka podatkov: `template`
 --
 
 -- --------------------------------------------------------
