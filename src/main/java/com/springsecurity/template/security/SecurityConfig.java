@@ -7,6 +7,7 @@ import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import com.springsecurity.template.security.converter.AuthenticationConverter;
 import com.springsecurity.template.security.generator.Jwks;
+import com.springsecurity.template.security.handler.SignOutSuccessHandler;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
@@ -31,12 +32,17 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@EnableWebMvc
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
 
     private RSAKey rsaKey;
 
@@ -68,6 +74,7 @@ public class SecurityConfig {
 
         return http
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configure(http))
                 .authorizeHttpRequests(
                         auth -> auth
                                 .requestMatchers("/sign-in-by-body").permitAll()
@@ -75,9 +82,18 @@ public class SecurityConfig {
                                 .requestMatchers("/user").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                                 .requestMatchers("/admin").hasAuthority("ROLE_ADMIN")
                                 .anyRequest().authenticated())
+                .logout(signOut ->
+                        signOut
+                                .logoutUrl("/sign-out")
+                                .logoutSuccessUrl("/sign-out-success")
+                                .logoutSuccessHandler(logoutSuccessHandler())
+                                .clearAuthentication(true)
+                                .invalidateHttpSession(false)
+                                .deleteCookies("JSESSIONID")
+                                .permitAll(false)
+                )
                 .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt()
-                        .jwtAuthenticationConverter(new AuthenticationConverter()))
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(new AuthenticationConverter())))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
@@ -127,5 +143,20 @@ public class SecurityConfig {
         return event -> {
             System.err.println("Bad Credentials Login " + event.getAuthentication().getClass().getSimpleName() + " - " + event.getAuthentication().getName());
         };
+    }
+
+    @Bean
+    public LogoutSuccessHandler logoutSuccessHandler() {
+        return new SignOutSuccessHandler();
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("GET", "POST")
+                .allowedHeaders("Origin", "Content-Type", "Authorization")
+                .allowCredentials(false)
+                .maxAge(3600);
     }
 }

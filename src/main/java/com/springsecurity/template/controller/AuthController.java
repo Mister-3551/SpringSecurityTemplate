@@ -45,4 +45,9 @@ public class AuthController {
     public String signUp() {
         return "Welcome on the Sign Up page";
     }
+
+    @PostMapping("/sign-out")
+    public void signOut() {
+
+    }
 }
