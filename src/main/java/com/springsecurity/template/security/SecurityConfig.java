@@ -44,13 +44,13 @@ public class SecurityConfig implements WebMvcConfigurer {
     private RSAKey rsaKey;
 
     @Bean
-    UserDetailsService myUserDetailsService() {
+    UserDetailsService userDetailsService() {
         return new CustomUserDetailsService();
     }
 
     @Bean
     BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(12);
     }
 
     @Order(Ordered.HIGHEST_PRECEDENCE)

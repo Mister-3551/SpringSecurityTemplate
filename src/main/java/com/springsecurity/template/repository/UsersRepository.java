@@ -1,9 +1,13 @@
 package com.springsecurity.template.repository;
 
 import com.springsecurity.template.entity.User;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 public interface UsersRepository extends JpaRepository<User, Integer> {
@@ -25,5 +29,32 @@ public interface UsersRepository extends JpaRepository<User, Integer> {
             "INNER JOIN users_authorities ua ON ua.id_user = u.id " +
             "INNER JOIN authorities a ON a.id = ua.id_authority " +
             "WHERE u.username = :usernameOrEmailAddress OR u.email_address = :usernameOrEmailAddress", nativeQuery = true)
-    Optional<User> findByUsernameOrEmailAddress(String usernameOrEmailAddress);
+    Optional<User> findByUsernameOrEmailAddress(@Param("usernameOrEmailAddress") String usernameOrEmailAddress);
+
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO users (full_name, username, email_address, password, birth_date, country, account_confirmed) VALUES (:fullName, :username, :emailAddress, :password, :birthDate, :country, :token) ", nativeQuery = true)
+    int insertUser(@Param("fullName") String fullName,
+               @Param("username") String username,
+               @Param("emailAddress") String emailAddress,
+               @Param("password") String password,
+               @Param("birthDate") LocalDate birthDate,
+               @Param("country") String country,
+               @Param("token") String token);
+
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO users_authorities (id_user, id_authority) " +
+            "SELECT u.id, 1 " +
+            "FROM users u " +
+            "WHERE u.username = :username", nativeQuery = true)
+    int insertUserRole(@Param("username") String username);
+
+    @Modifying
+    @Transactional
+    @Query(value = "DELETE FROM users " +
+            "WHERE username = :username " +
+            "AND email_address = :emailAddress", nativeQuery = true)
+    int deleteUser(@Param("username") String username,
+                   @Param("username") String emailAddress);
 }

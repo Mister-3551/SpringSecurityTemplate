@@ -1,18 +1,21 @@
 package com.springsecurity.template.controller;
 
 import com.springsecurity.template.record.SignInRequest;
+import com.springsecurity.template.record.SignUpRequest;
 import com.springsecurity.template.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 public class AuthController {
 
     //private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
     private final AuthService authService;
-
     @Autowired
     public AuthController(AuthService authService) {
         this.authService = authService;
@@ -32,11 +35,17 @@ public class AuthController {
     }
 
     @PostMapping("/sign-up")
-    public String signUp() {
-        return "Welcome on the Sign Up page";
+    public boolean signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
+        return authService.signUp(signUpRequest);
     }
 
     @PostMapping("/sign-out")
     public void signOut() {
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleValidationException(MethodArgumentNotValidException methodArgumentNotValidException) {
+        return authService.handleValidationException(methodArgumentNotValidException);
     }
 }
