@@ -22,9 +22,15 @@ public class AuthenticationConverter implements Converter<Jwt, AuthenticationTok
         Set<GrantedAuthority> authorities = ((Collection<String>) authoritiesClaim).stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());
-        CustomUser customUser = new CustomUser(user.get("fullName"), user.get("username"), "",
-                user.get("emailAddress"), authorities,
-                LocalDate.parse(user.get("birthdate")));
+        CustomUser customUser = new CustomUser(
+                user.get("fullName"),
+                user.get("username"),
+                "",
+                user.get("emailAddress"),
+                authorities,
+                user.get("country"),
+                user.get("accountConfirmed"),
+                user.get("accountLocked"));
         return new AuthenticationToken(authorities, customUser);
     }
 }

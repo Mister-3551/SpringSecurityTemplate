@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Data
+@NoArgsConstructor
 @Entity
 public class User {
 
@@ -18,7 +19,8 @@ public class User {
     private String authorities;
     private LocalDate birthDate;
     private String country;
-    private int accountLocked;
+    private String accountConfirmed;
+    private String accountLocked;
     private String unlockDate;
     private int reportsNumber;
 }

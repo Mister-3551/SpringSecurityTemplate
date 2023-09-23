@@ -9,7 +9,6 @@ import com.springsecurity.template.security.converter.AuthenticationConverter;
 import com.springsecurity.template.security.generator.Jwks;
 import com.springsecurity.template.security.handler.SignOutSuccessHandler;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -19,8 +18,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
-import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -77,7 +74,6 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .cors(cors -> cors.configure(http))
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/sign-in-by-body").permitAll()
                                 .requestMatchers("/sign-up").permitAll()
                                 .requestMatchers("/user").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                                 .requestMatchers("/admin").hasAuthority("ROLE_ADMIN")
@@ -131,19 +127,19 @@ public class SecurityConfig implements WebMvcConfigurer {
         return NimbusJwtDecoder.withPublicKey(rsaKey.toRSAPublicKey()).build();
     }
 
-    @Bean
+    /*@Bean
     ApplicationListener<AuthenticationSuccessEvent> successEvent() {
         return event -> {
             System.out.println("Success Login " + event.getAuthentication().getClass().getSimpleName() + " - " + event.getAuthentication().getName());
         };
-    }
+    }*/
 
-    @Bean
+    /*@Bean
     ApplicationListener<AuthenticationFailureBadCredentialsEvent> failureEvent() {
         return event -> {
             System.err.println("Bad Credentials Login " + event.getAuthentication().getClass().getSimpleName() + " - " + event.getAuthentication().getName());
         };
-    }
+    }*/
 
     @Bean
     public LogoutSuccessHandler logoutSuccessHandler() {

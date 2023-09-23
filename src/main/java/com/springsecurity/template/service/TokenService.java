@@ -28,8 +28,17 @@ public class TokenService {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toSet());
         CustomUser customUser = (CustomUser) authentication.getPrincipal();
-        JwtUser jwtUser = new JwtUser(customUser.getFullName(), authentication.getName(),
-                customUser.getEmailAddress(), customUser.getBirthdate().toString(), authorities);
+
+        JwtUser jwtUser = new JwtUser(
+                customUser.getFullName(),
+                authentication.getName(),
+                customUser.getEmailAddress(),
+                customUser.getCountry(),
+                customUser.isAccountConfirmed(),
+                customUser.isAccountLocked(),
+                authorities
+        );
+
         Instant now = Instant.now();
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer(authentication.getName())

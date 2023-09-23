@@ -25,20 +25,28 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         Optional<User> userByUsername = usersRepository.findByUsernameOrEmailAddress(usernameOrEmailAddress);
         if (!userByUsername.isPresent()) {
-            log.error("Could not find user with that usernameOrEmailAddress: {}", usernameOrEmailAddress);
             throw new UsernameNotFoundException("Invalid credentials!");
         }
+
         User user = userByUsername.get();
         if (user == null || !(user.getUsername().equals(usernameOrEmailAddress) || user.getEmailAddress().equals(usernameOrEmailAddress))) {
-            log.error("Could not find user with that usernameOrEmailAddress: {}", usernameOrEmailAddress);
             throw new UsernameNotFoundException("Invalid credentials!");
         }
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         for (String role : user.getAuthorities().split(",")) {
             grantedAuthorities.add(new SimpleGrantedAuthority(role));
         }
 
-        return new CustomUser(user.getFullName(), user.getUsername(), user.getPassword(), user.getEmailAddress(), grantedAuthorities, user.getBirthDate());
+        return new CustomUser(
+                user.getFullName(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getEmailAddress(),
+                grantedAuthorities,
+                user.getCountry(),
+                user.getAccountConfirmed(),
+                user.getAccountLocked()
+        );
     }
 }

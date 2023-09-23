@@ -6,6 +6,8 @@ public record JwtUser(
         String fullName,
         String username,
         String emailAddress,
-        String birthdate,
+        String country,
+        boolean accountConfirmed,
+        boolean accountLocked,
         Set<String> authorities) {
 }
