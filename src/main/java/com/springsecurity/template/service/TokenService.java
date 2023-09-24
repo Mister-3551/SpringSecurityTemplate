@@ -43,7 +43,7 @@ public class TokenService {
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer(authentication.getName())
                 .issuedAt(now)
-                .expiresAt(now.plus(1L, ChronoUnit.SECONDS))
+                .expiresAt(now.plus(1L, ChronoUnit.DAYS))
                 .subject(authentication.getName())
                 .claim("authorities", authorities)
                 .claim("user", jwtUser)
