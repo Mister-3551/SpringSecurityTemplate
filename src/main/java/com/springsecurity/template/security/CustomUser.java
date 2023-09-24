@@ -23,13 +23,13 @@ public class CustomUser extends User {
     private boolean accountConfirmed;
     private boolean accountLocked;
 
-    public CustomUser(String fullName, String username, String password, String emailAddress, Collection<? extends GrantedAuthority> authorities, String country, String accountConfirmed, String accountLocked) {
+    public CustomUser(String fullName, String username, String password, String emailAddress, Collection<? extends GrantedAuthority> authorities, String country, boolean accountConfirmed, boolean accountLocked) {
         super(username, password, authorities);
         this.fullName = fullName;
         this.emailAddress = emailAddress;
         this.country = country;
-        this.accountConfirmed = accountConfirmed.equals("1");
-        this.accountLocked = accountLocked.equals("1");
+        this.accountConfirmed = accountConfirmed;
+        this.accountLocked = accountLocked;
     }
 
     @Override

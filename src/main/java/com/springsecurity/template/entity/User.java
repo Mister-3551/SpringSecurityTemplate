@@ -19,8 +19,8 @@ public class User {
     private String authorities;
     private LocalDate birthDate;
     private String country;
-    private String accountConfirmed;
-    private String accountLocked;
+    private boolean accountConfirmed;
+    private boolean accountLocked;
     private String unlockDate;
     private int reportsNumber;
 }

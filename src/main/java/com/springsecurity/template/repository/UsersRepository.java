@@ -21,8 +21,8 @@ public interface UsersRepository extends JpaRepository<User, Integer> {
             "GROUP_CONCAT(a.authority) AS authorities, " +
             "u.birth_date, " +
             "u.country, " +
-            "u.account_confirmed, " +
-            "u.account_locked, " +
+            "CASE WHEN u.account_confirmed = '1' THEN true ELSE false END AS account_confirmed, " +
+            "CASE WHEN u.account_locked = '1' THEN true ELSE false END AS account_locked, " +
             "u.unlock_date, " +
             "u.reports_number " +
             "FROM users u " +
