@@ -1,13 +1,27 @@
--- Zbirka podatkov: `template`
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+--
+-- DATABASE: `template`
 --
 
+CREATE DATABASE template CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
 -- --------------------------------------------------------
+
+--
+-- TABLE STRUCTURE `authorities`
+--
 
 CREATE TABLE `authorities` (
   `id` int(11) NOT NULL,
   `authority` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- DATA FOR TABLE 'authorities'
+--
 
 INSERT INTO `authorities` (`id`, `authority`) VALUES
 (1, 'ROLE_USER'),
@@ -16,7 +30,7 @@ INSERT INTO `authorities` (`id`, `authority`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktura tabele `users`
+-- TABLE STRUCTURE `users`
 --
 
 CREATE TABLE `users` (
@@ -27,19 +41,24 @@ CREATE TABLE `users` (
   `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `birth_date` date DEFAULT NULL,
   `country` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `account_confirmed` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `account_locked` enum('0','1') COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `unlock_date` datetime DEFAULT NULL,
   `reports_number` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `users` (`id`, `full_name`, `username`, `email_address`, `password`, `birth_date`, `country`, `account_locked`, `unlock_date`, `reports_number`) VALUES
-(1, 'ADMIN', 'admin', 'admin@example.com', '$2a$12$8RTVJIO5qRoK.UEfvKxYHutT1izYBO2gOwigSV3d0jl5xCdE6NSKu', '2002-07-05', 'Slovenia', '0', NULL, 0),
-(2, 'USER', 'user', 'uporabnik@example.com', '$2a$12$XafR89eETmicau8mBsrDzub5z8YZmwaTCdb3IKCng2ctc7cE1FRMm', '2023-09-18', 'Slovenia', '0', NULL, 0);
+--
+-- DATA FOR TABLE `users`
+--
+
+INSERT INTO `users` (`id`, `full_name`, `username`, `email_address`, `password`, `birth_date`, `country`, `account_confirmed`, `account_locked`, `unlock_date`, `reports_number`) VALUES
+(1, 'ADMIN', 'admin', 'admin@example.com', '$2a$12$NZTb30OYzjfA7CPePx8pLurbsQllhFJz1JoWMXirwLx5U6WWMjfA.', '2000-04-09', 'Slovenia', '1', '0', NULL, 0),
+(2, 'USER', 'user', 'user@example.com', '$2a$12$NA7l.m9MF9rzYa9FTAMSluG6XeId9CqzZUETmwoG9W6.9CX/41hqG', '1999-09-18', 'Slovenia', '1', '0', NULL, 0);
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabele `users_authorities`
+-- TABLE STRUCTURE `users_authorities`
 --
 
 CREATE TABLE `users_authorities` (
@@ -48,23 +67,27 @@ CREATE TABLE `users_authorities` (
   `id_authority` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- DATA FOR TABLE `users_authorities`
+--
+
 INSERT INTO `users_authorities` (`id`, `id_user`, `id_authority`) VALUES
 (1, 1, 1),
 (2, 1, 2),
 (3, 2, 1);
 
 --
--- Indeksi zavrženih tabel
+-- Dropped table indexes
 --
 
 --
--- Indeksi tabele `authorities`
+-- Table indexes `authorities`
 --
 ALTER TABLE `authorities`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeksi tabele `users`
+-- Table indexes `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
@@ -72,7 +95,7 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `users_email_address` (`email_address`);
 
 --
--- Indeksi tabele `users_authorities`
+-- Table indexes `users_authorities`
 --
 ALTER TABLE `users_authorities`
   ADD PRIMARY KEY (`id`),
@@ -80,33 +103,33 @@ ALTER TABLE `users_authorities`
   ADD KEY `FK_AU_id` (`id_authority`);
 
 --
--- AUTO_INCREMENT zavrženih tabel
+-- AUTO_INCREMENT of discarded tables
 --
 
 --
--- AUTO_INCREMENT tabele `authorities`
+-- AUTO_INCREMENT tables `authorities`
 --
 ALTER TABLE `authorities`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT tabele `users`
+-- AUTO_INCREMENT tables `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
--- AUTO_INCREMENT tabele `users_authorities`
+-- AUTO_INCREMENT tables `users_authorities`
 --
 ALTER TABLE `users_authorities`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
--- Omejitve tabel za povzetek stanja
+-- Limitations of status summary tables
 --
 
 --
--- Omejitve za tabelo `users_authorities`
+-- Constraints for the table `users_authorities`
 --
 ALTER TABLE `users_authorities`
   ADD CONSTRAINT `FK_AU_id` FOREIGN KEY (`id_authority`) REFERENCES `authorities` (`id`),
