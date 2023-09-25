@@ -14,20 +14,11 @@ import java.util.Map;
 @RestController
 public class AuthController {
 
-    //private static final Logger LOG = LoggerFactory.getLogger(AuthController.class);
     private final AuthService authService;
     @Autowired
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
-
-    /*@PostMapping("/sign-in")
-    public String tokenByBody(Authentication authentication) {
-        LOG.debug("Token request for user: '{}'", authentication);
-        String token = tokenService.generateToken(authentication);
-        LOG.debug("Token: {}", token);
-        return token;
-    }*/
 
     @PostMapping("/sign-in")
     public String signIn(@RequestBody SignInRequest signInRequest) {
@@ -35,7 +26,7 @@ public class AuthController {
     }
 
     @PostMapping("/sign-up")
-    public boolean signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
+    public String signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         return authService.signUp(signUpRequest);
     }
 

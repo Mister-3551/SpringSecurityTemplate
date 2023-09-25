@@ -17,9 +17,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface ValidFullName {
 
-    String message() default "The full name must include your real first and last name";
-    String lengthMessage() default "Full name must be at lest 3 characters long";
-    String numbersMessage() default "Full name must not contains digits";
+    String message() default "The full name must include only latin letters";
+    String lengthMessage() default "Full name must be between 4 and 30 characters long";
+    String numbersMessage() default "Full name must not contains numbers";
 
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

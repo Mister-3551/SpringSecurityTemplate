@@ -21,7 +21,6 @@ public @interface ValidUsername {
     String lengthMessage() default "Username must be between 4 and 16 characters long";
     String uppercaseMessage() default "Username must not contains uppercase letters";
     String specialCharactersMessage() default "Username must not contains special characters";
-    String usernameExists() default "Username already exists";
 
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

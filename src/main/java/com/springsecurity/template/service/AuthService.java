@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -61,7 +62,19 @@ public class AuthService {
         return token;
     }
 
-    public boolean signUp(SignUpRequest signUpRequest) {
+    public String signUp(SignUpRequest signUpRequest) {
+
+        int userByUsername = usersRepository.findByUsername(signUpRequest.username());
+        int userByEmailAddress = usersRepository.findByEmailAddress(signUpRequest.emailAddress());
+
+        if (userByUsername >= 1) {
+            return "Username already exists";
+        }
+
+        if (userByEmailAddress >= 1) {
+            return "Email address already exists";
+        }
+
         if (usersRepository.insertUser(
                 signUpRequest.fullName(),
                 signUpRequest.username(),
@@ -71,13 +84,13 @@ public class AuthService {
                 signUpRequest.country(),
                 "generatedToken") == 1) {
             if (usersRepository.insertUserRole(signUpRequest.username()) == 1) {
-                return true;
+                return "User successfully created";
             } else {
                 usersRepository.deleteUser(signUpRequest.username(), signUpRequest.emailAddress());
-                return false;
+                return "Something went wrong";
             }
         }
-        return false;
+        return "Something went wrong";
     }
 
     public Map<String, String> handleValidationException(MethodArgumentNotValidException methodArgumentNotValidException) {

@@ -1,6 +1,5 @@
 package com.springsecurity.template.security.converter;
 
-import com.springsecurity.template.entity.User;
 import com.springsecurity.template.security.CustomUser;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.GrantedAuthority;

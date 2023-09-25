@@ -21,7 +21,7 @@ public @interface ValidPassword {
     String lengthMessage() default "Password must be between 8 and 16 characters long";
     String uppercaseMessage() default "Password must contain at least one uppercase letter";
     String lowercaseMessage() default "Password must contain at least one lowercase letter";
-    String numbersMessage() default "Password must contain at least one digit";
+    String numbersMessage() default "Password must contain at least one number";
     String specialCharacterMessage() default "Password must contain at least one special character (!, @, #, $, %, ^, &, *, ())";
 
     Class<?>[] groups() default {};

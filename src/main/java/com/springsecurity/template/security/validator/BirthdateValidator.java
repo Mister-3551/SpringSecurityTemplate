@@ -12,17 +12,24 @@ import java.time.Period;
 @Component
 public class BirthdateValidator implements ConstraintValidator<ValidBirthdate, String>, ConstraintViolation {
 
+    private String nullBirthdate;
     private String characterMessage;
     private String patternMessage;
 
     @Override
     public void initialize(ValidBirthdate constraintAnnotation) {
+        this.nullBirthdate = constraintAnnotation.nullMessage();
         this.characterMessage = constraintAnnotation.characterMessage();
         this.patternMessage = constraintAnnotation.patternMessage();
     }
 
     @Override
     public boolean isValid(String birthdate, ConstraintValidatorContext constraintValidatorContext) {
+
+        if (birthdate == null) {
+            constraintViolation(constraintValidatorContext, nullBirthdate);
+            return false;
+        }
 
         if (!birthdate.matches(".*[0-9/].*")) {
             constraintViolation(constraintValidatorContext, characterMessage);
@@ -33,7 +40,6 @@ public class BirthdateValidator implements ConstraintValidator<ValidBirthdate, S
             constraintViolation(constraintValidatorContext, patternMessage);
             return false;
         }
-
         return Period.between(LocalDate.parse(birthdate), LocalDate.now()).getYears() >= 10;
     }
 

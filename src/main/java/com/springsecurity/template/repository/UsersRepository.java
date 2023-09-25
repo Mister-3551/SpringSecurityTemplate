@@ -31,6 +31,16 @@ public interface UsersRepository extends JpaRepository<User, Integer> {
             "WHERE u.username = :usernameOrEmailAddress OR u.email_address = :usernameOrEmailAddress", nativeQuery = true)
     Optional<User> findByUsernameOrEmailAddress(@Param("usernameOrEmailAddress") String usernameOrEmailAddress);
 
+    @Query(value = "SELECT COUNT(u.id) AS user " +
+            "FROM users u " +
+            "WHERE u.username = :username", nativeQuery = true)
+    int findByUsername(String username);
+
+    @Query(value = "SELECT COUNT(u.id) AS user " +
+            "FROM users u " +
+            "WHERE u.email_address = :emailAddress", nativeQuery = true)
+    int findByEmailAddress(String emailAddress);
+
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO users (full_name, username, email_address, password, birth_date, country, account_confirmed) VALUES (:fullName, :username, :emailAddress, :password, :birthDate, :country, :token) ", nativeQuery = true)

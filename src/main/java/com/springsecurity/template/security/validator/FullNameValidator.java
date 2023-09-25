@@ -21,16 +21,16 @@ public class FullNameValidator implements ConstraintValidator<ValidFullName, Str
     @Override
     public boolean isValid(String fullName, ConstraintValidatorContext constraintValidatorContext) {
 
-        if (fullName.length() <= 2) {
+        if (fullName.length() < 3 || fullName.length() > 30) {
             constraintViolation(constraintValidatorContext, lengthMessage);
             return false;
         }
 
-        if (!fullName.matches("^[a-zA-Z\\s]+$")) {
+        if (fullName.matches("\\d+")) {
             constraintViolation(constraintValidatorContext, numbersMessage);
             return false;
         }
-        return true;
+        return fullName.matches("^[a-zA-ZčćđšžČĆĐŠŽ\\s]+$");
     }
 
     @Override

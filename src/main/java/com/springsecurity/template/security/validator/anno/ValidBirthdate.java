@@ -18,6 +18,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface ValidBirthdate {
 
     String message() default "User must be at least 10 years old";
+    String nullMessage() default "Birthdate must not be null";
     String characterMessage() default "Birthdate must not contains characters";
     String patternMessage() default "Birthdate is in wrong format";
 

@@ -127,20 +127,6 @@ public class SecurityConfig implements WebMvcConfigurer {
         return NimbusJwtDecoder.withPublicKey(rsaKey.toRSAPublicKey()).build();
     }
 
-    /*@Bean
-    ApplicationListener<AuthenticationSuccessEvent> successEvent() {
-        return event -> {
-            System.out.println("Success Login " + event.getAuthentication().getClass().getSimpleName() + " - " + event.getAuthentication().getName());
-        };
-    }*/
-
-    /*@Bean
-    ApplicationListener<AuthenticationFailureBadCredentialsEvent> failureEvent() {
-        return event -> {
-            System.err.println("Bad Credentials Login " + event.getAuthentication().getClass().getSimpleName() + " - " + event.getAuthentication().getName());
-        };
-    }*/
-
     @Bean
     public LogoutSuccessHandler logoutSuccessHandler() {
         return new SignOutSuccessHandler();

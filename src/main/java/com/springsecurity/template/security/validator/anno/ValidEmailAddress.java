@@ -17,8 +17,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface ValidEmailAddress {
 
-    String message() default "Invalid email address";
-    String emailAddressExists() default "Email address already exists";
+    String message() default "Invalid email address pattern";
 
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
