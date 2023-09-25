@@ -34,12 +34,12 @@ public interface UsersRepository extends JpaRepository<User, Integer> {
     @Query(value = "SELECT COUNT(u.id) AS user " +
             "FROM users u " +
             "WHERE u.username = :username", nativeQuery = true)
-    int findByUsername(String username);
+    int findByUsername(@Param("username") String username);
 
     @Query(value = "SELECT COUNT(u.id) AS user " +
             "FROM users u " +
             "WHERE u.email_address = :emailAddress", nativeQuery = true)
-    int findByEmailAddress(String emailAddress);
+    int findByEmailAddress(@Param("emailAddress") String emailAddress);
 
     @Modifying
     @Transactional
